@@ -2,9 +2,17 @@ package opencap
 
 import (
 	"errors"
+	"fmt"
 	"net"
+	"regexp"
 	"strings"
 )
+
+// MinUsernameLength is the minimum length allowable for usernames
+const MinUsernameLength = 1
+
+// MaxUsernameLength is the maxiumum length allowable for usernames
+const MaxUsernameLength = 25
 
 // GetHost returns the highest priority opencap host URL at a given
 // domain name.
@@ -29,32 +37,43 @@ func GetHost(domain string) (string, error) {
 	return target, nil
 }
 
-// ValidateAlias returns the username, domain, and error
+// ValidateUsername returns true if string is a valid username format
+func ValidateUsername(username string) (string, bool) {
+	username = strings.ToLower(username)
+	Re := regexp.MustCompile(
+		fmt.Sprintf(`^[a-z0-9._-]{%v,%v}$`,
+			MinUsernameLength,
+			MaxUsernameLength,
+		),
+	)
+	return username, Re.MatchString(username)
+}
+
+// ValidateDomain returns true if string is a valid domain format
+func ValidateDomain(username string) bool {
+	Re := regexp.MustCompile(`^[a-z0-9.\-]+\.[a-z]{2,4}$`)
+	return Re.MatchString(username)
+}
+
+// ValidateAlias splits an alias, validates it parts and
+// returns err if anything is wrong
 func ValidateAlias(alias string) (string, string, error) {
-	split := strings.Split(alias, "$")
-	if len(split) != 2 {
-		return "", "", errors.New("Invalid seperator use in alias")
+	parts := strings.Split(alias, "$")
+	if len(parts) != 2 {
+		return "", "", errors.New("Incorrect alias format")
 	}
-	username := split[0]
-	domain := split[1]
-	if len(username) < 1 {
-		return "", "", errors.New("No username in alias")
-	}
-	if len(domain) < 1 {
-		return "", "", errors.New("No domain in alias")
+	username := parts[0]
+	domain := parts[1]
+
+	username, valid := ValidateUsername(username)
+	if !valid {
+		return "", "", errors.New("Invalid username format")
 	}
 
-	domainParts := strings.Split(domain, ".")
-	if len(domainParts) != 2 {
-		return "", "", errors.New("Invalid domain in alias")
+	if !ValidateDomain(domain) {
+		return "", "", errors.New("Invalid domain format")
 	}
-	domainName := domainParts[0]
-	ext := domainParts[1]
-	if len(domainName) < 1 {
-		return "", "", errors.New("Invalid domain in alias")
-	}
-	if len(ext) < 1 {
-		return "", "", errors.New("Invalid domain in alias")
-	}
-	return username, domain, nil
+
+	// return domain, username, error
+	return domain, username, nil
 }
