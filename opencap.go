@@ -74,6 +74,5 @@ func ValidateAlias(alias string) (string, string, error) {
 		return "", "", errors.New("Invalid domain format")
 	}
 
-	// return domain, username, error
-	return domain, username, nil
+	return username, domain, nil
 }
