@@ -67,27 +67,26 @@ func TestValidateDomain(t *testing.T) {
 
 func TestValidateUsername(t *testing.T) {
 	username := "lane.c.Wagner"
-	newName, valid := ValidateUsername(username)
-	assert.True(t, valid)
-	assert.Equal(t, "lane.c.wagner", newName)
+	valid := ValidateUsername(username)
+	assert.False(t, valid)
 
-	username = "lane-c-wail"
-	newName, valid = ValidateUsername(username)
+	username = "lane-c-wa.il"
+	valid = ValidateUsername(username)
 	assert.True(t, valid)
 
 	username = "ner@gail.com"
-	newName, valid = ValidateUsername(username)
+	valid = ValidateUsername(username)
 	assert.False(t, valid)
 
 	username = "kvothe435245"
-	newName, valid = ValidateUsername(username)
+	valid = ValidateUsername(username)
 	assert.True(t, valid)
 
 	username = "fdasdilfsudfgshghgjghfjjhghjghjgjhgjghjhjidfsbfibkfjk"
-	newName, valid = ValidateUsername(username)
+	valid = ValidateUsername(username)
 	assert.False(t, valid)
 
 	username = ""
-	newName, valid = ValidateUsername(username)
+	valid = ValidateUsername(username)
 	assert.False(t, valid)
 }
