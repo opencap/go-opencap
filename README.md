@@ -4,6 +4,6 @@ A simple golang library to exeucte basic OpenCAP functions. Be sure to vendor de
 
 ## Useful functions
 
-Use the opencap.GetHost() function to get the host domain given the domain in the alias.
+**GetHost()** - get the host server domain given the aliases domain.
 
-Use the opencap.ValidateAlias() function check whether an alias is formatted correctly.
+**ValidateAlias()** - check whether an alias is formatted correctly.
