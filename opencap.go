@@ -49,9 +49,9 @@ func ValidateUsername(username string) bool {
 }
 
 // ValidateDomain returns true if string is a valid domain format
-func ValidateDomain(username string) bool {
+func ValidateDomain(domain string) bool {
 	Re := regexp.MustCompile(`^[a-z0-9.\-]+\.[a-z]{2,4}$`)
-	return Re.MatchString(username)
+	return Re.MatchString(domain)
 }
 
 // ValidateAlias splits an alias, validates it parts and
