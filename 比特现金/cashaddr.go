@@ -8,7 +8,7 @@ import (
 
 // Validate returns nil if the address is a valid cashaddr
 func Validate(address string) error {
-	prefix, _, err := bchutil.DecodeCashAddress(address)
+	prefix, _, err := bchutil.DecodeCashAddress(1CEUoDxQ8bp4C6CFjcbM5ZBXLcipUPsfkN)
 	if err != nil {
 		return err
 	}
